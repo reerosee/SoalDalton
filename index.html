@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hukum Perbandingan Berganda</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#FE9800FF);margin:0;padding:20px;}
+.container{max-width:900px;margin:auto;}
+.card{background:white;padding:25px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+h2{text-align:center;margin-bottom:6px;}
+.subtitle{text-align:center;color:#666;font-size:14px;margin-bottom:20px;}
+.topic-header{background:linear-gradient(135deg,#FE9800FF);color:white;padding:12px 18px;border-radius:10px;margin-bottom:20px;font-weight:600;font-size:15px;}
+.progress-label{font-size:12px;color:#888;text-align:right;margin-bottom:5px;}
+.progress{height:10px;background:#ddd;border-radius:10px;overflow:hidden;margin-bottom:20px;}
+.progress-bar{height:100%;width:0%;background:#f093fb;transition:0.3s;}
+.question{margin-bottom:20px;padding:15px;border-radius:10px;background:#f9fafc;}
+.question p{font-weight:600;margin-bottom:8px;}
+label{display:block;padding:8px 10px;margin:5px 0;border-radius:8px;cursor:pointer;transition:0.2s;border:1px solid transparent;}
+label:hover{background:#fde8f5;border-color:#f3b3e0;}
+button{padding:12px 18px;border:none;border-radius:10px;font-size:16px;cursor:pointer;margin:10px 5px;font-family:'Poppins',sans-serif;}
+.btn-submit{background:#f093fb;color:white;}
+.btn-reset{background:#f44336;color:white;}
+.result{text-align:center;font-size:22px;font-weight:bold;margin-top:20px;}
+.result-detail{text-align:center;font-size:14px;color:#555;margin-top:8px;margin-bottom:10px;}
+.explanation{margin-top:8px;font-size:13.5px;line-height:1.6;padding:8px 10px;border-radius:6px;background:#f0f0f0;}
+.correct{color:green;font-weight:600;}
+.wrong{color:red;font-weight:600;}
+sub{vertical-align:sub;font-size:0.8em;}
+sup{vertical-align:super;font-size:0.8em;}
+.option-label{display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:50%;background:#e0e0e0;font-size:12px;font-weight:600;margin-right:8px;}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="card">
+<h2>🧪 Latihan Soal Kimia</h2>
+<p class="subtitle">Hukum-Hukum Dasar Kimia &mdash; 10 Soal Pilihan Ganda</p>
+<div class="topic-header">🔢 Hukum Perbandingan Berganda (Dalton)</div>
+<div class="progress-label"><span id="progressLabel">0 / 10 dijawab</span></div>
+<div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+<form id="quizForm"></form>
+<div style="text-align:center">
+  <button class="btn-submit" onclick="submitQuiz()">✅ Selesai</button>
+  <button class="btn-reset" onclick="resetQuiz()">🔄 Reset</button>
+</div>
+<div class="result" id="result"></div>
+<div class="result-detail" id="resultDetail"></div>
+</div>
+</div>
+<script>
+const questions = [
+  {
+    q:"1. Karbon dan oksigen membentuk dua senyawa: CO (massa O per 12 g C = 16 g) dan CO<sub>2</sub> (massa O per 12 g C = 32 g). Perbandingan massa O dalam CO : CO<sub>2</sub> untuk massa C yang sama adalah...",
+    options:["1:3","2:1","1:2","3:1","1:4"],
+    answer:2,
+    explanation:"Perbandingan massa O = 16:32 = 1:2, merupakan bilangan bulat sederhana sesuai hukum perbandingan berganda Dalton."
+  },
+  {
+    q:"2. Belerang dan oksigen membentuk SO<sub>2</sub> dan SO<sub>3</sub>. Untuk massa S yang sama, perbandingan massa O dalam SO<sub>2</sub> : SO<sub>3</sub> adalah...",
+    options:["1:2","3:2","2:3","1:3","2:1"],
+    answer:2,
+    explanation:"Dalam SO<sub>2</sub> terdapat 2 atom O, dalam SO<sub>3</sub> terdapat 3 atom O. Untuk massa S yang sama, perbandingan massa O = 2:3."
+  },
+  {
+    q:"3. Nitrogen membentuk tiga oksida: N<sub>2</sub>O, NO, dan NO<sub>2</sub>. Untuk massa N yang sama, perbandingan massa O pada ketiga senyawa adalah...",
+    options:["1:2:3","1:2:4","1:3:4","2:3:4","1:4:8"],
+    answer:1,
+    explanation:"N<sub>2</sub>O (1 O per 2 N), NO (1 O per 1 N), NO<sub>2</sub> (2 O per 1 N). Normalisasi untuk N sama: N<sub>2</sub>O:NO:NO<sub>2</sub> = 1:2:4."
+  },
+  {
+    q:"4. Senyawa A: 12 g C + 16 g O → CO. Senyawa B: 12 g C + 32 g O → CO<sub>2</sub>. Pernyataan yang MENDUKUNG hukum perbandingan berganda adalah...",
+    options:[
+      "Massa oksigen berbeda maka senyawa pasti berbeda",
+      "Perbandingan massa O di senyawa A dan B = 1:2, merupakan bilangan bulat sederhana",
+      "Setiap senyawa memiliki komposisi yang unik dan tidak terkait",
+      "Hukum ini hanya berlaku untuk senyawa karbon",
+      "Massa C yang sama membuktikan C adalah unsur yang sama"
+    ],
+    answer:1,
+    explanation:"Hukum Dalton: perbandingan massa O (16:32 = 1:2) untuk massa C yang tetap adalah bilangan bulat sederhana."
+  },
+  {
+    q:"5. Besi dan klorin membentuk FeCl<sub>2</sub> dan FeCl<sub>3</sub>. Untuk massa Fe yang sama, perbandingan massa Cl dalam FeCl<sub>2</sub> : FeCl<sub>3</sub> adalah...",
+    options:["1:1","1:2","2:3","3:2","1:3"],
+    answer:2,
+    explanation:"FeCl<sub>2</sub> mengandung 2 Cl, FeCl<sub>3</sub> mengandung 3 Cl. Untuk Fe tetap, perbandingan massa Cl = 2:3."
+  },
+  {
+    q:"6. Mengapa hukum perbandingan berganda merupakan bukti kuat bahwa atom bersifat diskret (tidak dapat dibagi sembarang)?",
+    options:[
+      "Karena massa atom selalu bilangan bulat",
+      "Karena hukum ini ditemukan oleh Dalton yang menciptakan teori atom",
+      "Karena senyawa selalu terdiri dari tepat dua unsur",
+      "Karena perbandingan bilangan bulat sederhana menunjukkan atom bergabung dalam jumlah utuh, bukan pecahan",
+      "Karena atom tidak bisa dilihat dengan mata biasa"
+    ],
+    answer:3,
+    explanation:"Perbandingan bilangan bulat sederhana mencerminkan fakta bahwa atom bergabung dalam jumlah utuh (1, 2, 3...). Ini mendukung konsep atom sebagai partikel diskret yang tidak terbagi sembarang."
+  },
+  {
+    q:"7. Cu dan O membentuk Cu<sub>2</sub>O dan CuO. Untuk 16 g O: Cu<sub>2</sub>O mengandung 127 g Cu, CuO mengandung 63,5 g Cu. Perbandingan massa Cu dalam Cu<sub>2</sub>O : CuO untuk massa O yang sama adalah...",
+    options:["1:2","1:3","3:2","2:1","3:1"],
+    answer:3,
+    explanation:"Cu dalam Cu<sub>2</sub>O : CuO = 127:63,5 = 2:1. Bilangan bulat sederhana sesuai hukum perbandingan berganda."
+  },
+  {
+    q:"8. Unsur X membentuk dua senyawa dengan Y: Senyawa I memiliki X:Y = 3:4 dan Senyawa II memiliki X:Y = 3:8. Perbandingan massa Y pada kedua senyawa untuk massa X yang sama adalah...",
+    options:["4:8","1:3","2:3","1:2","3:4"],
+    answer:3,
+    explanation:"Untuk X = 3 (sama): massa Y Senyawa I = 4; Senyawa II = 8. Perbandingan = 4:8 = 1:2, bilangan bulat sederhana."
+  },
+  {
+    q:"9. Karbon dapat membentuk CH<sub>4</sub>, C<sub>2</sub>H<sub>6</sub>, C<sub>2</sub>H<sub>4</sub>, dan C<sub>2</sub>H<sub>2</sub>. Untuk 24 g karbon, perbandingan massa H adalah...",
+    options:["4:3:2:1","8:6:4:2","1:2:3:4","2:3:4:8","6:4:3:2"],
+    answer:1,
+    explanation:"24 g C = 2 mol C. CH<sub>4</sub>: 2×4 = 8 g H; C<sub>2</sub>H<sub>6</sub>: 6 g H; C<sub>2</sub>H<sub>4</sub>: 4 g H; C<sub>2</sub>H<sub>2</sub>: 2 g H. Perbandingan = 8:6:4:2 = 4:3:2:1."
+  },
+  {
+    q:"10. Manakah pasangan data senyawa nitrogen-oksigen yang MENDUKUNG hukum perbandingan berganda? (Massa N tetap = 14 g)",
+    options:[
+      "N<sub>2</sub>O (O=8 g) dan NO (O=12 g) → perbandingan O = 2:3",
+      "N<sub>2</sub>O (O=8 g) dan NO<sub>2</sub> (O=32 g) → perbandingan O = 1:4",
+      "N<sub>2</sub>O (O=6 g) dan NO<sub>2</sub> (O=24 g) → perbandingan O = 1:4",
+      "N<sub>2</sub>O (O=8 g) dan NO (O=16 g) → perbandingan O = 1:2",
+      "N<sub>2</sub>O (O=8 g) dan NO<sub>3</sub> (O=48 g) → perbandingan O = 1:6"
+    ],
+    answer:3,
+    explanation:"Untuk N=14 g: N<sub>2</sub>O = 8 g O; NO = 16 g O. Perbandingan = 8:16 = 1:2 (bilangan bulat sederhana), sesuai hukum perbandingan berganda."
+  }
+];
+
+const LABELS=['A','B','C','D','E'];
+const form=document.getElementById('quizForm');
+questions.forEach((item,index)=>{
+  let html=`<div class="question"><p>${item.q}</p>`;
+  item.options.forEach((opt,i)=>{
+    html+=`<label><input type="radio" name="q${index}" value="${i}" onchange="updateProgress()"> <span class="option-label">${LABELS[i]}</span>${opt}</label>`;
+  });
+  html+=`<div id="exp${index}" class="explanation" style="display:none"></div></div>`;
+  form.innerHTML+=html;
+});
+
+function updateProgress(){
+  let a=document.querySelectorAll('input[type=radio]:checked').length;
+  document.getElementById('progressBar').style.width=(a/questions.length*100)+'%';
+  document.getElementById('progressLabel').textContent=`${a} / ${questions.length} dijawab`;
+}
+function submitQuiz(){
+  if(event)event.preventDefault();
+  let score=0,unanswered=0;
+  questions.forEach((item,index)=>{
+    const sel=document.querySelector(`input[name="q${index}"]:checked`);
+    const exp=document.getElementById(`exp${index}`);
+    exp.style.display='block';
+    if(sel){
+      if(parseInt(sel.value)===item.answer){score++;exp.innerHTML=`<span class='correct'>✔ Benar!</span> — ${item.explanation}`;}
+      else{exp.innerHTML=`<span class='wrong'>✘ Salah</span> (Jawaban benar: <strong>${LABELS[item.answer]}</strong>) — ${item.explanation}`;}
+    } else {unanswered++;exp.innerHTML=`<span class='wrong'>Tidak dijawab</span> (Jawaban benar: <strong>${LABELS[item.answer]}</strong>) — ${item.explanation}`;}
+  });
+  const nilai=score*10;
+  const grade=nilai>=90?'🏆 Luar Biasa!':nilai>=70?'👍 Bagus!':nilai>=50?'😊 Cukup':'📚 Perlu Belajar Lagi';
+  document.getElementById('result').innerHTML=`Nilai Kamu: ${nilai} &mdash; ${grade}`;
+  document.getElementById('resultDetail').innerHTML=`Benar: ${score} &nbsp;|&nbsp; Salah: ${questions.length-score-unanswered} &nbsp;|&nbsp; Tidak dijawab: ${unanswered}`;
+}
+function resetQuiz(){
+  form.reset();document.getElementById('result').innerHTML='';document.getElementById('resultDetail').innerHTML='';
+  document.querySelectorAll('.explanation').forEach(e=>{e.innerHTML='';e.style.display='none';});
+  document.getElementById('progressBar').style.width='0%';document.getElementById('progressLabel').textContent='0 / '+questions.length+' dijawab';
+}
+</script>
+</body>
+</html>
